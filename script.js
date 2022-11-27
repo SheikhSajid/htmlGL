@@ -36,7 +36,7 @@ function computeAngle([x1, y1], [x2, y2]) {
   const diffX = Math.abs(x1 - x2);
   const diffY = Math.abs(y1 - y2);
 
-  return Math.atan(diffX / diffY);
+  return Math.atan(diffY / diffX);
 }
 
 function computeSegmentLength([x1, y1], [x2, y2]) {
@@ -54,7 +54,7 @@ function drawSegment([x1, y1], [x2, y2]) {
   const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, -y * GAP);
   segmentElement.style.left = `${aX - 2}px`;
   segmentElement.style.top = `${aY - 2}px`;
-  // segmentElement.style.transform = `rotate(${-computeAngle([x1, y1], [x2, y2])}rad)`
+  segmentElement.style.transform = `rotate(${-computeAngle([x1, y1], [x2, y2])}rad)`
 }
 
 const dinoPixels = [
