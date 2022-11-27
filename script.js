@@ -50,11 +50,14 @@ function drawSegment([x1, y1], [x2, y2]) {
   const segmentElement = document.getElementById('segment');
   segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2]) * GAP}px`;
   
-  const [x, y] = x1 < x2 ? [x1, y1] : [x2, y2];
+  const [x, y, xOther, yOther] = y1 < y2 ? [x1, y1, x2, y2] : [x2, y2, x1, y1];
   const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, -y * GAP);
-  segmentElement.style.left = `${aX - 2}px`;
-  segmentElement.style.top = `${aY - 2}px`;
-  segmentElement.style.transform = `rotate(${-computeAngle([x1, y1], [x2, y2])}rad)`
+  segmentElement.style.left = `${aX}px`;
+  segmentElement.style.top = `${aY}px`;
+
+  const computedAngle = computeAngle([x1, y1], [x2, y2]);
+  const angle = x > xOther ? Math.PI - computedAngle : computedAngle;
+  segmentElement.style.transform = `rotate(${-angle}rad)`
 }
 
 const dinoPixels = [
@@ -75,3 +78,5 @@ for (const [x, y, highlight] of dinoPixels) {
 }
 
 drawSegment([6, 4], [5, 1]);
+// drawSegment([1, 2], [3, -1]);
+// drawSegment([-4, 0], [-1, 0]);
