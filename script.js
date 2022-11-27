@@ -22,10 +22,19 @@ function getAbsolutePosition(x1, y1) {
 }
 
 function putPixel(x, y, color, size) {
-  const { x2, y2 } = getAbsolutePosition(x, y);
+  const GAP = 20; // px
+  const { x2, y2 } = getAbsolutePosition(
+    x === 0 ? x : x * GAP,
+    y === 0 ? y : y * GAP
+  );
   const pixel = makePixel(x2, y2, color, size);
 
   document.body.appendChild(pixel);
 }
 
-putPixel(0, 0, 'red', 15);
+putPixel(0, 0, 'red', 10);
+putPixel(1, 0, 'orange', 10);
+putPixel(2, 0, 'pink', 10);
+putPixel(0, 1, 'orange', 10);
+putPixel(0, 2, 'orange', 10);
+// putPixel(1, -1, 'pink', 10);
