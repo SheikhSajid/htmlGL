@@ -22,7 +22,7 @@ function getAbsolutePosition(x1, y1) {
 }
 
 function putPixel(x, y, color, size) {
-  const GAP = 20; // px
+  const GAP = 40; // px
   
   // CSS 'top' property is the opposite of y coordinates in the cartesian plane
   y = -y;
@@ -33,6 +33,19 @@ function putPixel(x, y, color, size) {
   document.body.appendChild(pixel);
 }
 
-putPixel(0, 0, 'red', 10);
-putPixel(1, -1, 'red', 10);
-putPixel(1, 1, 'green', 10);
+const dinoPixels = [
+  [-2, 5], [-1, 5],
+  [-4 ,4], [-3, 4], [6, 4],
+  [-5, 3],
+  [-5, 2], [-2, 2], [1, 2],
+  [-5, 1], [-2, 1], [3, 1], [5, 1],
+  [-4, 0], [-1, 0],
+  [3, -1],
+  [1, -2],
+  [0, -3], [2, -3],
+  [-1, -4], [1, -4]
+];
+
+for (const [x, y] of dinoPixels) {
+  putPixel(x, y, 'black', 10);
+}
