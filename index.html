@@ -23,6 +23,13 @@
       transform: translate(-50%, -50%);
     }
 
+    #segment {
+      border-top: 4px solid blueviolet;
+      height: 2px;
+      position: absolute;
+      transform-origin: top left;
+    }
+
     #x-axis, #y-axis {
       position: absolute;
     }
@@ -43,6 +50,7 @@
 <body>
   <div id="x-axis"></div>
   <div id="y-axis"></div>
+  <div id="segment"></div>
   <script src="./script.js"></script>
 </body>
 </html>

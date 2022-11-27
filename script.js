@@ -1,5 +1,6 @@
 const CANVAS_WIDTH = 1920; // px
 const CANVAS_HEIGHT = 1080; // px
+const GAP = 40; // px
 
 function makePixel(x, y, color = 'yellow', size = 5) {
   const div = document.createElement('div');
@@ -21,9 +22,7 @@ function getAbsolutePosition(x1, y1) {
   return { x2, y2 };
 }
 
-function putPixel(x, y, color, size) {
-  const GAP = 40; // px
-  
+function putPixel(x, y, color, size) {  
   // CSS 'top' property is the opposite of y coordinates in the cartesian plane
   y = -y;
 
@@ -33,12 +32,37 @@ function putPixel(x, y, color, size) {
   document.body.appendChild(pixel);
 }
 
+function computeAngle([x1, y1], [x2, y2]) {
+  const diffX = Math.abs(x1 - x2);
+  const diffY = Math.abs(y1 - y2);
+
+  return Math.atan(diffX / diffY);
+}
+
+function computeSegmentLength([x1, y1], [x2, y2]) {
+  const diffX = Math.abs(x1 - x2);
+  const diffY = Math.abs(y1 - y2);
+
+  return Math.hypot(diffX, diffY);
+}
+
+function drawSegment([x1, y1], [x2, y2]) {
+  const segmentElement = document.getElementById('segment');
+  segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2]) * GAP}px`;
+  
+  const [x, y] = x1 < x2 ? [x1, y1] : [x2, y2];
+  const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, -y * GAP);
+  segmentElement.style.left = `${aX - 2}px`;
+  segmentElement.style.top = `${aY - 2}px`;
+  // segmentElement.style.transform = `rotate(${-computeAngle([x1, y1], [x2, y2])}rad)`
+}
+
 const dinoPixels = [
   [-2, 5], [-1, 5],
-  [-4 ,4], [-3, 4], [6, 4],
+  [-4 ,4], [-3, 4], [6, 4, true],
   [-5, 3],
   [-5, 2], [-2, 2], [1, 2],
-  [-5, 1], [-2, 1], [3, 1], [5, 1],
+  [-5, 1], [-2, 1], [3, 1, true], [5, 1],
   [-4, 0], [-1, 0],
   [3, -1],
   [1, -2],
@@ -46,6 +70,8 @@ const dinoPixels = [
   [-1, -4], [1, -4]
 ];
 
-for (const [x, y] of dinoPixels) {
-  putPixel(x, y, 'black', 10);
+for (const [x, y, highlight] of dinoPixels) {
+  putPixel(x, y, highlight ? 'red' : 'black', 10);
 }
+
+drawSegment([6, 4], [5, 1]);
