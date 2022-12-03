@@ -46,8 +46,10 @@ function computeSegmentLength([x1, y1], [x2, y2]) {
   return Math.hypot(diffX, diffY);
 }
 
+let totalSegments = 0;
 function drawSegment([x1, y1], [x2, y2]) {
-  const segmentElement = document.getElementById('segment');
+  const segmentElement = document.createElement('div');
+  segmentElement.className = 'segment';
   segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2]) * GAP}px`;
   
   const [x, y, xOther, yOther] = y1 < y2 ? [x1, y1, x2, y2] : [x2, y2, x1, y1];
@@ -57,26 +59,26 @@ function drawSegment([x1, y1], [x2, y2]) {
 
   const computedAngle = computeAngle([x1, y1], [x2, y2]);
   const angle = x > xOther ? Math.PI - computedAngle : computedAngle;
-  segmentElement.style.transform = `rotate(${-angle}rad)`
+  segmentElement.style.transform = `rotate(${-angle}rad)`;
+  document.body.appendChild(segmentElement);
+}
+
+function drawPolygon(points) {
+  points.forEach(([x1, y1], i) => {
+    const [x2, y2] = points[(i + 1) % points.length];
+    drawSegment([x1, y1], [x2, y2]);
+  });
 }
 
 const dinoPixels = [
-  [-2, 5], [-1, 5],
-  [-4 ,4], [-3, 4], [6, 4, true],
-  [-5, 3],
-  [-5, 2], [-2, 2], [1, 2],
-  [-5, 1], [-2, 1], [3, 1, true], [5, 1],
-  [-4, 0], [-1, 0],
-  [3, -1],
-  [1, -2],
-  [0, -3], [2, -3],
-  [-1, -4], [1, -4]
+  [-5, 2], [-5, 3], [-4, 4], [-3, 4], [-2, 5], [-1, 5],
+  [1, 2], [3, 1], [6, 4], [5, 1], [3, -1], [1, -2],
+  [2, -3], [1, -4], [-1, -4], [0, -3], [-1, 0], [-2, 1],
+  [-4, 0], [-5, 1], [-2, 2]
 ];
 
 for (const [x, y, highlight] of dinoPixels) {
   putPixel(x, y, highlight ? 'red' : 'black', 10);
 }
 
-drawSegment([6, 4], [5, 1]);
-// drawSegment([1, 2], [3, -1]);
-// drawSegment([-4, 0], [-1, 0]);
+drawPolygon(dinoPixels);
