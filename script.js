@@ -1,6 +1,6 @@
 const CANVAS_WIDTH = 1920; // px
 const CANVAS_HEIGHT = 1080; // px
-const GAP = 40; // px
+const SCALE = 40; // px
 
 function makePixel(x, y, color = 'yellow', size = 5) {
   const div = document.createElement('div');
@@ -17,7 +17,8 @@ function makePixel(x, y, color = 'yellow', size = 5) {
 
 function getAbsolutePosition(x1, y1) {
   // CSS 'top' property is the opposite of y coordinates in the cartesian plane
-  y1 = -y1;
+  y1 = -y1 * SCALE;
+  x1 = x1 * SCALE;
 
   const x2 = x1 + CANVAS_WIDTH / 2;
   const y2 = y1 + CANVAS_HEIGHT / 2;
@@ -26,7 +27,7 @@ function getAbsolutePosition(x1, y1) {
 }
 
 function putPixel(x, y, color, size) {  
-  const { x2, y2 } = getAbsolutePosition(x * GAP, y * GAP);
+  const { x2, y2 } = getAbsolutePosition(x, y);
   const pixel = makePixel(x2, y2, color, size);
 
   document.body.appendChild(pixel);
@@ -43,17 +44,17 @@ function computeSegmentLength([x1, y1], [x2, y2]) {
   const diffX = Math.abs(x1 - x2);
   const diffY = Math.abs(y1 - y2);
 
-  return Math.hypot(diffX, diffY);
+  return Math.hypot(diffX, diffY) * SCALE;
 }
 
 let totalSegments = 0;
 function drawSegment([x1, y1], [x2, y2]) {
   const segmentElement = document.createElement('div');
   segmentElement.className = 'segment';
-  segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2]) * GAP}px`;
+  segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2])}px`;
   
   const [x, y, xOther, yOther] = y1 < y2 ? [x1, y1, x2, y2] : [x2, y2, x1, y1];
-  const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, y * GAP);
+  const { x2: aX, y2: aY } = getAbsolutePosition(x, y);
   segmentElement.style.left = `${aX}px`;
   segmentElement.style.top = `${aY}px`;
 
