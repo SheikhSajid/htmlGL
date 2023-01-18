@@ -16,6 +16,9 @@ function makePixel(x, y, color = 'yellow', size = 5) {
 }
 
 function getAbsolutePosition(x1, y1) {
+  // CSS 'top' property is the opposite of y coordinates in the cartesian plane
+  y1 = -y1;
+
   const x2 = x1 + CANVAS_WIDTH / 2;
   const y2 = y1 + CANVAS_HEIGHT / 2;
 
@@ -23,9 +26,6 @@ function getAbsolutePosition(x1, y1) {
 }
 
 function putPixel(x, y, color, size) {  
-  // CSS 'top' property is the opposite of y coordinates in the cartesian plane
-  y = -y;
-
   const { x2, y2 } = getAbsolutePosition(x * GAP, y * GAP);
   const pixel = makePixel(x2, y2, color, size);
 
@@ -53,7 +53,7 @@ function drawSegment([x1, y1], [x2, y2]) {
   segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2]) * GAP}px`;
   
   const [x, y, xOther, yOther] = y1 < y2 ? [x1, y1, x2, y2] : [x2, y2, x1, y1];
-  const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, -y * GAP);
+  const { x2: aX, y2: aY } = getAbsolutePosition(x * GAP, y * GAP);
   segmentElement.style.left = `${aX}px`;
   segmentElement.style.top = `${aY}px`;
 
