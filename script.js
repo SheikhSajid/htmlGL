@@ -47,8 +47,7 @@ function computeSegmentLength([x1, y1], [x2, y2]) {
   return Math.hypot(diffX, diffY) * SCALE;
 }
 
-let totalSegments = 0;
-function drawSegment([x1, y1], [x2, y2]) {
+function drawLine([x1, y1], [x2, y2]) {
   const segmentElement = document.createElement('div');
   segmentElement.className = 'segment';
   segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2])}px`;
@@ -65,10 +64,16 @@ function drawSegment([x1, y1], [x2, y2]) {
 }
 
 function drawPolygon(points) {
-  points.forEach(([x1, y1], i) => {
-    const [x2, y2] = points[(i + 1) % points.length];
-    drawSegment([x1, y1], [x2, y2]);
+  points.forEach((point, i) => {
+    const nextPoint = points[(i + 1) % points.length];
+    drawLine(point, nextPoint);
   });
+}
+
+function drawPoints(points) {
+  for (const [x, y, highlight] of points) {
+    putPixel(x, y, highlight ? 'red' : 'black', 10);
+  }
 }
 
 const dinoPixels = [
@@ -78,8 +83,5 @@ const dinoPixels = [
   [-4, 0], [-5, 1], [-2, 2]
 ];
 
-for (const [x, y, highlight] of dinoPixels) {
-  putPixel(x, y, highlight ? 'red' : 'black', 10);
-}
-
 drawPolygon(dinoPixels);
+drawPoints(dinoPixels);
