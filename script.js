@@ -2,7 +2,7 @@ const CANVAS_WIDTH = 1920; // px
 const CANVAS_HEIGHT = 1080; // px
 const SCALE = 40; // px
 
-function makePixel(x, y, color = 'yellow', size = 5) {
+function makePixelElement(x, y, color = 'yellow', size = 5) {
   const div = document.createElement('div');
   div.classList.add('pixel');
 
@@ -15,7 +15,8 @@ function makePixel(x, y, color = 'yellow', size = 5) {
   return div;
 }
 
-function getAbsolutePosition(x1, y1) {
+// Convert from cartesian plane to CSS pixel coordinates
+function getCSSPosition(x1, y1) {
   // CSS 'top' property is the opposite of y coordinates in the cartesian plane
   y1 = -y1 * SCALE;
   x1 = x1 * SCALE;
@@ -27,8 +28,8 @@ function getAbsolutePosition(x1, y1) {
 }
 
 function putPixel(x, y, color, size) {  
-  const { x2, y2 } = getAbsolutePosition(x, y);
-  const pixel = makePixel(x2, y2, color, size);
+  const { x2, y2 } = getCSSPosition(x, y);
+  const pixel = makePixelElement(x2, y2, color, size);
 
   document.body.appendChild(pixel);
 }
@@ -40,7 +41,7 @@ function computeAngle([x1, y1], [x2, y2]) {
   return Math.atan(diffY / diffX);
 }
 
-function computeSegmentLength([x1, y1], [x2, y2]) {
+function computeLineLength([x1, y1], [x2, y2]) {
   const diffX = Math.abs(x1 - x2);
   const diffY = Math.abs(y1 - y2);
 
@@ -50,10 +51,10 @@ function computeSegmentLength([x1, y1], [x2, y2]) {
 function drawLine([x1, y1], [x2, y2]) {
   const segmentElement = document.createElement('div');
   segmentElement.className = 'segment';
-  segmentElement.style.width = `${computeSegmentLength([x1, y1], [x2, y2])}px`;
+  segmentElement.style.width = `${computeLineLength([x1, y1], [x2, y2])}px`;
   
   const [x, y, xOther, yOther] = y1 < y2 ? [x1, y1, x2, y2] : [x2, y2, x1, y1];
-  const { x2: aX, y2: aY } = getAbsolutePosition(x, y);
+  const { x2: aX, y2: aY } = getCSSPosition(x, y);
   segmentElement.style.left = `${aX}px`;
   segmentElement.style.top = `${aY}px`;
 
